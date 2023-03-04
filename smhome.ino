@@ -2,7 +2,7 @@
 
 #include <easy_mfrc522/src/EasyMFRC522.h>
 #include <rfid/src/RfidDictionaryView.h>
-
+#include <liquidcrystal/src/LiquidCrystal.h>
 #include <AdafruitFP/src/Adafruit_Fingerprint.h>
 
 // Define ports.
