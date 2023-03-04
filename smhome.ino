@@ -56,6 +56,7 @@ void loop()                     // run over and over again
   }
 
   else if( id != -1){
+       Servo1.write(90);                // Rotate 90 degrees
        digitalWrite(relay1, LOW);
        delay(2000);
        digitalWrite(relay1, HIGH);
@@ -86,14 +87,10 @@ uint8_t getFingerprintID() {
   p = finger.image2Tz();
   switch (p) {
 
-
     case FINGERPRINT_OK:
       Serial.println("Image converted");   
-// Rotate 90 degrees every time FINGERPRINT_OK
-      Servo1.write(90); 
       delay(1000); 
       break;
-
 
     case FINGERPRINT_IMAGEMESS:
       Serial.println("Image too messy");
