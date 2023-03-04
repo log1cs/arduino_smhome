@@ -1,9 +1,9 @@
-#include <servo/Servo.h>
+#include <servo/src/Servo.h>
 
-#include <EasyMFRC522.h>
-#include <RfidDictionaryView.h>
+#include <easy_mfrc522/src/EasyMFRC522.h>
+#include <rfid/src/RfidDictionaryView.h>
 
-#include <Adafruit_Fingerprint.h>
+#include <AdafruitFP/src/Adafruit_Fingerprint.h>
 
 // Define ports.
 SoftwareSerial mySerial(2, 3);
