@@ -1,10 +1,9 @@
-#include <Servo.h>
+#include <servo/Servo.h>
 
 #include <EasyMFRC522.h>
 #include <RfidDictionaryView.h>
 
 #include <Adafruit_Fingerprint.h>
-#include <Servo.h>
 
 // Define ports.
 SoftwareSerial mySerial(2, 3);
