@@ -1,5 +1,5 @@
 #include <servo/src/Servo.h>
-
+#include <SPI/SPI.h>
 #include <easy_mfrc522/src/EasyMFRC522.h>
 #include <rfid/src/RfidDictionaryView.h>
 #include <liquidcrystal/src/LiquidCrystal.h>
