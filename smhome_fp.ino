@@ -39,8 +39,11 @@ void loop() {
   if (fingerprintID == -1) {
       Serial.println("Your credentials doesn't match! Search progress will be continue.");
       return 0;
-  } else if (fingerprintID == 1 || fingerprintID == 2 || fingerprintID == 3 || fingerprintID == 4 || fingerprintID == 5) {
-       Serial.println("Unlocked!");
+  } else if (fingerprintID == 1 || fingerprintID == 2 || fingerprintID == 3 ||
+	     fingerprintID == 4 || fingerprintID == 5 || fingerprintID == 6 ||
+	     fingerprintID == 7 || fingerprintID == 8 || fingerprintID == 9 ||
+	     fingerprintID == 10) {
+       Serial.println("Credential match! Unlocking.");
        ServoA.write(90);                // Rotate 90 degrees
        delay(2000);
        ServoA.write(0);
