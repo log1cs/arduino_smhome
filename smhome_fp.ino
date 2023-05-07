@@ -32,6 +32,9 @@ void setup() {
 }
 
 void loop() {
+  // Just stay in 0 will you?
+  ServoA.write(0);
+
   // Continuously search for matched fingerprint
   Serial.println("Searching for fingerprint...");
   fingerprintID = getFingerprintIDez();
@@ -45,8 +48,8 @@ void loop() {
 	     fingerprintID == 10) {
        Serial.println("Credential match! Unlocking.");
        ServoA.write(90);                // Rotate 90 degrees
-       delay(2000);
-       ServoA.write(0);
+       delay(5000);
+       ServoA.write(0);                 // Back to original state.
   }
   delay(50);
 
