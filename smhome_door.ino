@@ -1,22 +1,41 @@
+//
+// (C) 2023, Pozitron/Lycoris Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #include <Servo.h>
 #include <Adafruit_Fingerprint.h>
 #include <Keypad.h>
 
-// Define SoftwareSerial ports.
+/// Define SoftwareSerial ports.
 SoftwareSerial mySerial(2, 3);
 
-// Servo
+/// Servo
 Servo ServoA;
 int servoPin = 12;
 
-// Fingerprint
+// Define start angle.
+int position = 0;
+
+/// Fingerprint
 Adafruit_Fingerprint fp = Adafruit_Fingerprint(&mySerial);
 int fingerprintID = 0;
 
-//// Keypad and Password ////
-const byte ROWS = 4; //four rows
-const byte COLS = 4; //four columns
+//// Keypad - Password
+const byte ROWS = 4; // 4 rows
+const byte COLS = 4; // 4 columns
 
+// Keylayout
 char keys[ROWS][COLS] = {
   {'1','2','3','A'},
   {'4','5','6','B'},
@@ -24,8 +43,9 @@ char keys[ROWS][COLS] = {
   {'*','0','#','D'}
 };
 
-byte rowPins[ROWS] = {11, 10, 9, 8}; //connect to the row pinouts of the keypad
-byte colPins[COLS] = {7, 6, 5, 4}; //connect to the column pinouts of the keypad
+// Connected pins
+byte rowPins[ROWS] = {11, 10, 9, 8}; 
+byte colPins[COLS] = {7, 6, 5, 4};
 
 Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 
@@ -33,15 +53,16 @@ Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 const String Password1 = "ABCD";
 const String Password2 = "1234";
 const String Password3 = "0001";
+const String Password4 = "1000";
 String password;
 
-/// Main code
+//// Main code
 void setup() {
   // Attach servo1.
   ServoA.attach(servoPin);
   ServoA.write(0);
-
-  // Fingerprint sensor module setup.
+  /// Fingerprint sensor module setup.
+  // Set the speed to 9600 baud.
   Serial.begin(9600);
   fp.begin(57600);
 
@@ -50,16 +71,16 @@ void setup() {
   } else {
     Serial.println("FP sensor not detected!");
     while (1) {
-       delay(1); 
+      delay(1); 
     }
   }
 
-  // Keypad
+  // Maximum password length is password.reserve(x) digits
   password.reserve(4);
 
   // Let's go!
   Serial.println("Welcome!");
-  Serial.println("Please touch the fingerprint sensor or enter the password to unlock the doors.");
+  Serial.println("Please place your finger on the fingerprint sensor or enter the password to unlock.");
 }
 
 void loop() {
@@ -69,7 +90,11 @@ void loop() {
   // Continuously search for matched fingerprint
   fingerprintID = getFingerprintIDez();
 
-  // Password
+/// To-do:
+/// Merging password unlock method with fingeprint one
+/// (to clean up the code)
+
+  /// Password
   char key = keypad.getKey();
 
   if (key) {
@@ -79,10 +104,10 @@ void loop() {
       // Reset
       password = "";
     } else if(key == '#') {
-      if(password == Password1 || password == Password2 || password == Password3) {
-        Serial.println("Credentials match! Unlocking the door.");
+      if(password == Password1 || password == Password2 || password == Password3 || password == Password4) {
+        Serial.println("Credentials match! Unlocking.");
         ServoA.write(90);
-        delay(5000);
+        delay(7000);
         ServoA.write(0);
       } else {
         Serial.println("Wrong credentials. Try again");
@@ -91,27 +116,27 @@ void loop() {
       // Reset
       password = "";
     } else {
-      password += key; // append new character to input password string
+      // Append new character to input password string
+      password += key;
     }
   }
 
-  // Fingerprint
+  /// Fingerprint
   if (fingerprintID == -1) {
       return 0;
   } else if (fingerprintID == 1 || fingerprintID == 2 || fingerprintID == 3 ||
-	           fingerprintID == 4 || fingerprintID == 5 || fingerprintID == 6 ||
-	           fingerprintID == 7 || fingerprintID == 8 || fingerprintID == 9 ||
-	           fingerprintID == 10) {
-       Serial.println("Credential match! Unlocking.");
-       ServoA.write(90);                // Rotate 90 degrees
-       delay(5000);
-       ServoA.write(0);                 // Back to original state.
+	           fingerprintID == 4 || fingerprintID == 5 || fingerprintID == 6) {
+        Serial.println("Credential match! Unlocking.");
+        ServoA.write(90);
+        delay(7000);
+        ServoA.write(0);
+  } else {
+        Serial.println("Wrong credentials. Try again");
   }
   delay(50);
-
 }
 
-// returns -1 if failed, otherwise returns ID #
+// getFingerprint function
 int getFingerprintIDez() {
   uint8_t p = fp.getImage();
 
@@ -130,7 +155,7 @@ int getFingerprintIDez() {
   }
 
   // Return these values if fingerprint operation successful
-  Serial.print("Found ID #"); 
+  Serial.print("Found ID "); 
   Serial.print(fp.fingerID); 
   Serial.print(" with confidence of "); 
   Serial.println(fp.confidence);
