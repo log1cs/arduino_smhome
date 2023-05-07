@@ -66,10 +66,12 @@ void setup() {
   Serial.begin(9600);
   fp.begin(57600);
 
+  Serial.println("Checking for Fingerprint sensor...");
+
   if (fp.verifyPassword()) {
     Serial.println("FP sensor detected");
   } else {
-    Serial.println("FP sensor not detected!");
+    Serial.println("FP sensor not detected. Check your connection.");
     while (1) {
       delay(1); 
     }
@@ -81,6 +83,7 @@ void setup() {
   // Let's go!
   Serial.println("Welcome!");
   Serial.println("Please place your finger on the fingerprint sensor or enter the password to unlock.");
+  Serial.println("Password: ");
 }
 
 void loop() {
@@ -98,18 +101,22 @@ void loop() {
   char key = keypad.getKey();
 
   if (key) {
-    Serial.println(key);
+    Serial.print(key);
 
     if(key == '*') {
+      Serial.println();
+      Serial.println("You triggered the Reset button! Type password again from the start.");
       // Reset
       password = "";
     } else if(key == '#') {
       if(password == Password1 || password == Password2 || password == Password3 || password == Password4) {
+        Serial.println();
         Serial.println("Credentials match! Unlocking.");
         ServoA.write(90);
-        delay(7000);
+        delay(4500);
         ServoA.write(0);
       } else {
+        Serial.println();
         Serial.println("Wrong credentials. Try again");
       }
 
@@ -126,11 +133,13 @@ void loop() {
       return 0;
   } else if (fingerprintID == 1 || fingerprintID == 2 || fingerprintID == 3 ||
 	           fingerprintID == 4 || fingerprintID == 5 || fingerprintID == 6) {
+        Serial.println();
         Serial.println("Credential match! Unlocking.");
         ServoA.write(90);
-        delay(7000);
+        delay(4500);
         ServoA.write(0);
   } else {
+        Serial.println();
         Serial.println("Wrong credentials. Try again");
   }
   delay(50);
