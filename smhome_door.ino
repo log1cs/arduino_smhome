@@ -93,8 +93,7 @@ void loop() {
   // Continuously search for matched fingerprint
   fingerprintID = getFingerprintIDez();
 
-/// To-do:
-/// Merging password unlock method with fingeprint one
+/// To-do: Merging password unlock method with fingeprint one
 /// (to clean up the code)
 
   /// Password
@@ -132,7 +131,7 @@ void loop() {
   if (fingerprintID == -1) {
       return 0;
   } else if (fingerprintID == 1 || fingerprintID == 2 || fingerprintID == 3 ||
-	           fingerprintID == 4 || fingerprintID == 5 || fingerprintID == 6) {
+	     fingerprintID == 4 || fingerprintID == 5 || fingerprintID == 6) {
         Serial.println();
         Serial.println("Credential match! Unlocking.");
         ServoA.write(90);
